@@ -1,4 +1,4 @@
-package entity;
+package filippo.viola.macchinaenigma.entity;
 
 
 public class Riflettore {;

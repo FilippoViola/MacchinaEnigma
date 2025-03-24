@@ -2,11 +2,11 @@ package filippo.viola.macchinaenigma.entity;
 
 import java.util.ArrayList;
 
-public class MacchinaEngima {
+public class MacchinaEnigma {
     private ArrayList<Rotore> rotori;
     private Riflettore rif;
 
-    public MacchinaEngima(Rotore r1, Rotore r2, Rotore r3, Riflettore rif) {
+    public MacchinaEnigma(Rotore r1, Rotore r2, Rotore r3, Riflettore rif) {
         this.rotori = new ArrayList<>();
         rotori.add(r1);
         rotori.add(r2);
