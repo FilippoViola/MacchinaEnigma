@@ -3,15 +3,17 @@ package filippo.viola.macchinaenigma.entity;
 import java.util.ArrayList;
 
 public class MacchinaEnigma {
-    private ArrayList<Rotore> rotori;
-    private Riflettore rif;
+    private final ArrayList<Rotore> rotori;
+    private final Riflettore rif;
+    private final Scambiatore sc;
 
-    public MacchinaEnigma(Rotore r1, Rotore r2, Rotore r3, Riflettore rif) {
+    public MacchinaEnigma(Rotore r1, Rotore r2, Rotore r3, Riflettore rif,Scambiatore sc) {
         this.rotori = new ArrayList<>();
         rotori.add(r1);
         rotori.add(r2);
         rotori.add(r3);
         this.rif = rif;
+        this.sc = sc;
     }
 
     public void ruotaRotori(){
@@ -27,9 +29,10 @@ public class MacchinaEnigma {
 
     public char codificaCarattere(char c){
         c = Character.toUpperCase(c);
+        c = sc.scambia(c);
         ruotaRotori();
-        for (int i = 0; i < rotori.size(); i++) {
-            c = rotori.get(i).codifica(c);
+        for (Rotore rotore : rotori) {
+            c = rotore.codifica(c);
         }
 
         c = rif.rifletti(c);
