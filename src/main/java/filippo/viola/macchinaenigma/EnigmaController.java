@@ -3,7 +3,7 @@ package filippo.viola.macchinaenigma;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class EnigmaController {
     @FXML
     private Label welcomeText;
 
