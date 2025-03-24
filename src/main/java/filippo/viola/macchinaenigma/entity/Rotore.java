@@ -1,7 +1,5 @@
 package filippo.viola.macchinaenigma.entity;
 
-import entity.Cablaggio;
-
 public class Rotore {
     private int numeroCablaggio;
     private int rotazione;
