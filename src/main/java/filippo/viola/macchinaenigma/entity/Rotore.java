@@ -3,9 +3,11 @@ package filippo.viola.macchinaenigma.entity;
 public class Rotore {
     private int numeroCablaggio;
     private int rotazione;
+    private final int rotazioneIniziale;
     public Rotore(int numeroCablaggio, int rotazione) {
         this.numeroCablaggio = numeroCablaggio;
         this.rotazione = rotazione;
+        rotazioneIniziale = rotazione;
     }
 
     public char codifica(char c){
@@ -20,8 +22,21 @@ public class Rotore {
         return (char)((cab.cablaggioInvertito[pos] + pos + 26 - rotazione) % 26 + 'A');
     }
 
-    public void ruota(){
+
+    public boolean ruota(){
+        int r = rotazione;
         rotazione = (rotazione + 1) % 26;
+        return r == Cablaggio.getCablaggio(numeroCablaggio).getPuntoScatto();
+    }
+
+    public boolean ruotaInvertito(){
+        int r = rotazione;
+        rotazione = (rotazione + 25) % 26;
+        return r == Cablaggio.getCablaggio(numeroCablaggio).getPuntoScatto();
+    }
+
+    public void clear(){
+        this.rotazione = rotazioneIniziale;
     }
 
     public char getRotazione(){

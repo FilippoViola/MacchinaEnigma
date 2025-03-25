@@ -29,6 +29,11 @@ public class Scambiatore {
         }
     }
 
+    public Scambiatore() {
+
+        cavi = new ArrayList<>(Collections.nCopies(26,'*'));
+    }
+
     /**
      * aggiunge la corrispondenza tra i due caratteri
      * @param a carattere scambiato

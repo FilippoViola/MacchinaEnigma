@@ -6,7 +6,6 @@ public class MacchinaEnigma {
     private final ArrayList<Rotore> rotori;
     private final Riflettore rif;
     private final Scambiatore sc;
-
     public MacchinaEnigma(Rotore r1, Rotore r2, Rotore r3, Riflettore rif,Scambiatore sc) {
         this.rotori = new ArrayList<>();
         rotori.add(r1);
@@ -14,6 +13,15 @@ public class MacchinaEnigma {
         rotori.add(r3);
         this.rif = rif;
         this.sc = sc;
+    }
+
+    public MacchinaEnigma() {
+        this.rotori = new ArrayList<>();
+        this.rif = new Riflettore();
+        sc = new Scambiatore();
+        rotori.add(new Rotore(0,0));
+        rotori.add(new Rotore(1,0));
+        rotori.add(new Rotore(2,0));
     }
 
     public void ruotaRotori(){
@@ -50,5 +58,11 @@ public class MacchinaEnigma {
             codificata.append(codificaCarattere(c));
         }
         return codificata.toString();
+    }
+
+    public void clear(){
+        for(Rotore r : rotori){
+            r.clear();
+        }
     }
 }

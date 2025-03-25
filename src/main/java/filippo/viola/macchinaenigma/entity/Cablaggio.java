@@ -3,22 +3,33 @@ package filippo.viola.macchinaenigma.entity;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.CharBuffer;
 import java.util.ArrayList;
 
 public class Cablaggio {
-    private final static String PATH_CABLAGGI = "file/cablaggio.txt";
+    private final static String PATH_CABLAGGI = "configurazione/cablaggio.txt";
     private final static ArrayList<Cablaggio> cablaggi;
     public int[] cablaggio;
     public int[] cablaggioInvertito;
-
+    private int puntoScatto;
     public Cablaggio(String cablaggio){
         this.cablaggio = new int[26];
         this.cablaggioInvertito = new int[26];
         for(int i = 0; i < 26; i++){
-            int a = cablaggio.charAt(i) - 'A';
+            char c = cablaggio.charAt(i);
+            if(Character.isUpperCase(c)){
+                puntoScatto = i;
+            } else {
+                c = Character.toUpperCase(c);
+            }
+            int a = c - 'A';
             this.cablaggio[i] = a - i;
             this.cablaggioInvertito[a] = i - a;
         }
+    }
+
+    public int getPuntoScatto() {
+        return puntoScatto;
     }
 
     public static Cablaggio getCablaggio(int numero){

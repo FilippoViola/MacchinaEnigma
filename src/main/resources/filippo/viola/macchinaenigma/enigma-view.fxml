@@ -16,8 +16,8 @@
       </font></Label>
    <HBox prefHeight="204.0" prefWidth="572.0">
       <children>
-         <TextField fx:id="txtInput" prefHeight="26.0" prefWidth="204.0" promptText="Input" />
-         <TextField />
+         <TextField fx:id="inputText" alignment="TOP_LEFT" onKeyTyped="#decodeAndOutput" onMouseExited="#decodeAndOutput" prefHeight="204.0" prefWidth="300.0" promptText="Input" />
+         <TextField fx:id="outputText" alignment="TOP_LEFT" editable="false" prefHeight="231.0" prefWidth="300.0" promptText="output" />
       </children>
    </HBox>
    <GridPane fx:id="gridBottoni" prefHeight="87.0" prefWidth="0.0">
