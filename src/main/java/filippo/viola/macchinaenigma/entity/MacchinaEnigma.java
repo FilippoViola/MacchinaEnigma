@@ -26,10 +26,20 @@ public class MacchinaEnigma {
     }
 
     public void ruotaRotori(boolean invertito){
+        boolean rotazioneACatena = false;
         for (Rotore rotore : rotori) {
-            boolean b = invertito ? rotore.ruotaInvertito() : rotore.ruota();
-            if (!b) {
-                break;
+            if(!rotazioneACatena){
+                boolean b = invertito ? rotore.ruotaInvertito() : rotore.ruota();
+                if (!b) {
+                    rotazioneACatena = true;
+                }
+            } else if(rotore.sulPuntoScatto()){
+                rotazioneACatena = false;
+                if (invertito) {
+                    rotore.ruotaInvertito();
+                } else {
+                    rotore.ruota();
+                }
             }
         }
     }

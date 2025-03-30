@@ -45,6 +45,10 @@ public class Rotore {
         return r == Cablaggio.getCablaggio(numeroCablaggio).getPuntoScatto();
     }
 
+    public boolean sulPuntoScatto(){
+        return rotazione == Cablaggio.getCablaggio(numeroCablaggio).getPuntoScatto();
+    }
+
     public void clear(){
         this.rotazione = rotazioneIniziale;
     }

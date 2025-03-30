@@ -30,7 +30,6 @@ public class EnigmaController {
 
     private void aggiornaRotazioni(){
         for (int i = 0; i < rotazioni.length; i++){
-            System.out.println(me.getRotazioneRotore(i));
             rotazioni[i].setText(String.valueOf(me.getRotazioneRotore(i)));
         }
     }
