@@ -3,7 +3,7 @@ package filippo.viola.macchinaenigma.entity;
 public class Rotore {
     private int numeroCablaggio;
     private int rotazione;
-    private final int rotazioneIniziale;
+    private int rotazioneIniziale;
     public Rotore(int numeroCablaggio, int rotazione) {
         this.numeroCablaggio = numeroCablaggio;
         this.rotazione = rotazione;
@@ -27,6 +27,16 @@ public class Rotore {
         int r = rotazione;
         rotazione = (rotazione + 1) % 26;
         return r == Cablaggio.getCablaggio(numeroCablaggio).getPuntoScatto();
+    }
+
+    public void ruotaIniziale(){
+        rotazioneIniziale = (rotazioneIniziale + 1) % 26;
+        rotazione = rotazioneIniziale;
+    }
+
+    public void ruotaInizialeInvertito(){
+        rotazioneIniziale = (rotazioneIniziale + 25) % 26;
+        rotazione = rotazioneIniziale;
     }
 
     public boolean ruotaInvertito(){
