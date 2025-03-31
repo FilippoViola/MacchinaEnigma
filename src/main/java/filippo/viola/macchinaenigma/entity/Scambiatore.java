@@ -51,6 +51,10 @@ public class Scambiatore {
         return true;
     }
 
+    public boolean aggiungiCavo(String s){
+        return aggiungiCavo(s.charAt(0),s.charAt(1));
+    }
+
 
     /**
      * togliere il cavo che scambia il carattere c
