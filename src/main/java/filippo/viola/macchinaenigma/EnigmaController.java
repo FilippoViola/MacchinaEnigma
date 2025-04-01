@@ -112,14 +112,10 @@ public class EnigmaController {
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     sc.textProperty().removeListener(this);
                     try {
-                        if (newValue.isEmpty()) {
-                            return;
-                        }
-                        if (!newValue.matches("^[A-Z]*$")) {
+                        if (!newValue.matches("^[A-Z]*$") || haRuotato) {
                             sc.setText(oldValue);
                             return;
                         }
-
                         if (oldValue.length() == 2) {
                             me.getScambiatore().togliCavo(oldValue);
                         }
