@@ -83,7 +83,7 @@ public class MacchinaEnigma {
         for (int i = rotori.size()-1; i >= 0; i--) {
             c = rotori.get(i).codificaInvertito(c);
         }
-
+        c = sc.scambia(c);
         return c;
     }
 
