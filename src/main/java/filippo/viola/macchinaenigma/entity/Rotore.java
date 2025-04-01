@@ -67,6 +67,7 @@ public class Rotore {
 
     public void setRotazione(int rotazione){
         this.rotazione = rotazione % 26;
+        this.rotazioneIniziale = rotazione;
     }
 }
 

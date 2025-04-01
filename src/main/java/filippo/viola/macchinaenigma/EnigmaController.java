@@ -54,7 +54,7 @@ public class EnigmaController {
 
     private void aggiornaRotazioni(){
         for (int i = 0; i < rotazioni.length; i++){
-            rotazioni[i].setText(String.valueOf(me.getRotazioneRotore(i)));
+            rotazioni[i].setText(me.getRotazioneRotore(i) + "-");
         }
     }
 
@@ -111,7 +111,6 @@ public class EnigmaController {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     sc.textProperty().removeListener(this);
-
                     try {
                         if (newValue.isEmpty()) {
                             return;
@@ -173,13 +172,15 @@ public class EnigmaController {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 textRotazione.textProperty().removeListener(this);
                 try {
-                    if (!newValue.matches("^[A-Z]$") || haRuotato) {
+                    if(newValue.length() == 2 && newValue.charAt(1) == '-'){
+                        textRotazione.setText(String.valueOf(newValue.charAt(0)));
+                    } else if (newValue.isEmpty() || !newValue.matches("^[A-Z]+$") || haRuotato) {
                         textRotazione.setText(oldValue);
                     } else {
-                        textRotazione.setText(newValue);
-                        me.setRotazioneRotore(indice,newValue.charAt(0)-'A');
+                        char c = newValue.charAt(newValue.length() - 1);
+                        textRotazione.setText(String.valueOf(c));
+                        me.setRotazioneRotore(indice, c - 'A');
                     }
-
                 } finally {
                     textRotazione.textProperty().addListener(this);
                 }
