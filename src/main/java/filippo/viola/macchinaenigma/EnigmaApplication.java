@@ -12,6 +12,7 @@ public class EnigmaApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(EnigmaApplication.class.getResource("enigma-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+
         stage.setTitle("Macchina Enigma");
         stage.setScene(scene);
         stage.show();

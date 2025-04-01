@@ -64,5 +64,9 @@ public class Rotore {
     public void setNumeroCablaggio(int numeroCablaggio){
         this.numeroCablaggio = numeroCablaggio;
     }
+
+    public void setRotazione(int rotazione){
+        this.rotazione = rotazione % 26;
+    }
 }
 

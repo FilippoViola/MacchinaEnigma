@@ -41,6 +41,8 @@ public class Scambiatore {
      * @return se è possibile aggiungere il cavo
      */
     public boolean aggiungiCavo(char a,char b){
+        if(a == b)
+            return false;
         int posA = a-'A';
         int posB = b-'A';
         if(cavi.get(posA) != '*' || cavi.get(posB) != '*'){ // esiste già un cavo
@@ -61,7 +63,7 @@ public class Scambiatore {
      * @param c carattere
      * @return Se è stato possibile togliere il cavo
      */
-    public boolean togliCavo(char c){
+    private boolean togliCavo(char c){
         int pos = c - 'A';
         int corrispondente = scambia(c) - 'A';
         if(corrispondente == pos){
@@ -70,6 +72,18 @@ public class Scambiatore {
         cavi.set(corrispondente,'*');
         cavi.set(pos,'*');
         return true;
+    }
+
+    public boolean togliCavo(String s){
+        if(s.length() != 2)
+            return false;
+        char a = s.charAt(0);
+        char b = s.charAt(1);
+        if(scambia(a) != b){
+            return false;
+        }
+        return togliCavo(a);
+
     }
 
     public char scambia(char c){

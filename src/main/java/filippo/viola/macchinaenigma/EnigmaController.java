@@ -1,8 +1,18 @@
 package filippo.viola.macchinaenigma;
 
+import filippo.viola.macchinaenigma.entity.Cablaggio;
 import filippo.viola.macchinaenigma.entity.MacchinaEnigma;
+import filippo.viola.macchinaenigma.util.NumberUtil;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -17,7 +27,10 @@ public class EnigmaController {
     public TextArea outputText;
     @FXML
     public GridPane gridRotori;
+
+    @FXML
     public GridPane scambiatori;
+
     @FXML
     private GridPane gridBottoni;
 
@@ -30,6 +43,14 @@ public class EnigmaController {
     private boolean haRuotato = false;
 
     private static final int N_SCAMBIATORI = 6;
+
+
+    private static final UnaryOperator<TextFormatter.Change> UPPERCASE_FILTER = change -> {
+        if (change.getText() != null) {
+            change.setText(change.getText().toUpperCase());
+        }
+        return change;
+    };
 
     private void aggiornaRotazioni(){
         for (int i = 0; i < rotazioni.length; i++){
@@ -78,23 +99,40 @@ public class EnigmaController {
     }
 
     private void initScambiatori(){
-        addRowColToGrid(scambiatori,1,50,N_SCAMBIATORI,60);
+        addRowColToGrid(scambiatori,1,50,N_SCAMBIATORI,100);
+        scambiatori.setAlignment(Pos.CENTER);
         for(int i = 0; i < N_SCAMBIATORI; i++){
             TextField sc = new TextField();
+            sc.setMaxWidth(80);
             scambiatori.add(sc,i,0);
-            sc.textProperty().addListener((observable, oldValue, newValue) -> {
-                newValue = newValue.toUpperCase();
-                if(!newValue.matches("^[A-Z]*$")){
-                    return;
-                }
-                if(oldValue.length() == 2){
-                    me.getScambiatore().togliCavo(oldValue.charAt(0));
-                }
-                if(newValue.length() == 2){
-                    if(me.getScambiatore().aggiungiCavo(newValue)){
-                        sc.setText(newValue);
-                    } else {
-                        sc.setText("");
+            allineaAlcentro(sc);
+            sc.setTextFormatter(new TextFormatter<>(UPPERCASE_FILTER));
+            sc.textProperty().addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    sc.textProperty().removeListener(this);
+
+                    try {
+                        if (newValue.isEmpty()) {
+                            return;
+                        }
+                        if (!newValue.matches("^[A-Z]*$")) {
+                            sc.setText(oldValue);
+                            return;
+                        }
+
+                        if (oldValue.length() == 2) {
+                            me.getScambiatore().togliCavo(oldValue);
+                        }
+                        if (newValue.length() == 2) {
+                            if (!me.getScambiatore().aggiungiCavo(newValue)) {
+                                Platform.runLater(() -> sc.setText(""));
+                            }
+                        } else if (newValue.length() >= 3) {
+                            sc.setText(newValue.substring(0, 2));
+                        }
+                    } finally {
+                        sc.textProperty().addListener(this);
                     }
                 }
             });
@@ -102,14 +140,53 @@ public class EnigmaController {
     }
 
 
+    private static void allineaAlcentro(Node n){
+        GridPane.setHalignment(n, HPos.CENTER);
+        GridPane.setValignment(n, VPos.CENTER);
+    }
+
     private void initSingoloRotore(int indice){
         // invertire indice
         final int indiceGrid = me.getNRotori() - indice - 1;
-        //TODO cambiare il cablaggio
+        //cambiare il cablaggio
+        ComboBox<String> c = new ComboBox<>();
+        for (int i = 1; i <= Cablaggio.getTotaleCabaggi(); i++) {
+            c.getItems().add(NumberUtil.convertiInRomano(i));
+        }
+        c.setValue(NumberUtil.convertiInRomano(me.getCablaggio(indice)+1));
+        c.setOnAction(e -> {
+            me.setCablaggioRotore(indice,NumberUtil.convertiDaRomano(c.getValue()) - 1);
+        });
+        c.showingProperty().addListener((_, _, newValue) -> {
+            if (haRuotato && newValue) {
+                c.hide(); // Blocca l'apertura
+            }
+        });
 
+        gridRotori.add(c, indiceGrid, 0);
         TextField textRotazione = new TextField();
-        rotazioni[indice] = textRotazione;
+        textRotazione.setPrefWidth(20);
+        textRotazione.setAlignment(Pos.CENTER);
+        textRotazione.setTextFormatter(new TextFormatter<>(UPPERCASE_FILTER));
+        textRotazione.textProperty().addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                textRotazione.textProperty().removeListener(this);
+                try {
+                    if (!newValue.matches("^[A-Z]$") || haRuotato) {
+                        textRotazione.setText(oldValue);
+                    } else {
+                        textRotazione.setText(newValue);
+                        me.setRotazioneRotore(indice,newValue.charAt(0)-'A');
+                    }
 
+                } finally {
+                    textRotazione.textProperty().addListener(this);
+                }
+            }
+        });
+
+        rotazioni[indice] = textRotazione;
         // ruotare
         Button b = new Button();
         b.setText("+");
@@ -120,9 +197,11 @@ public class EnigmaController {
             rotazioni[indice].setText(String.valueOf(me.getRotazioneRotore(indice)));
         });
         gridRotori.add(b,indiceGrid,1);
+        allineaAlcentro(b);
 
         textRotazione.setText(String.valueOf(me.getRotazioneRotore(indice)));
         gridRotori.add(textRotazione,indiceGrid,2);
+        allineaAlcentro(textRotazione);
 
         b = new Button();
         b.setText("-");
@@ -134,11 +213,13 @@ public class EnigmaController {
         });
 
         gridRotori.add(b,indiceGrid,3);
+        allineaAlcentro(b);
     }
 
     private void initRotori(){
         rotazioni = new TextField[me.getNRotori()];
         addRowColToGrid(gridRotori,4,50,me.getNRotori(),60);
+        GridPane.setHalignment(gridRotori, HPos.CENTER);
         for(int i = 0; i < me.getNRotori(); i++){
             initSingoloRotore(i);
         }
@@ -175,15 +256,10 @@ public class EnigmaController {
     @FXML
     private void initialize(){
         me = new MacchinaEnigma();
+        initScambiatori();
         initRotori();
         initBottoni();
-        UnaryOperator<TextFormatter.Change> filter = change -> {
-            if (change.getText() != null) {
-                change.setText(change.getText().toUpperCase());
-            }
-            return change;
-        };
-        inputText.setTextFormatter(new TextFormatter<>(filter));
+        inputText.setTextFormatter(new TextFormatter<>(UPPERCASE_FILTER));
     }
 
     @FXML

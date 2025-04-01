@@ -52,6 +52,10 @@ public class MacchinaEnigma {
         }
     }
 
+    public void setRotazioneRotore(int indice, int rotazione){
+        this.rotori.get(indice).setRotazione(rotazione);
+    }
+
     public void setCablaggioRotore(int indice, int cab){
         rotori.get(indice).setNumeroCablaggio(cab);
     }
@@ -102,5 +106,9 @@ public class MacchinaEnigma {
 
     public Scambiatore getScambiatore() {
         return sc;
+    }
+
+    public int getCablaggio(int indiceRotore){
+        return this.rotori.get(indiceRotore).getNumeroCablaggio();
     }
 }

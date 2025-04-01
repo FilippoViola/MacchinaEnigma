@@ -7,8 +7,8 @@ import java.nio.CharBuffer;
 import java.util.ArrayList;
 
 public class Cablaggio {
-    private final static String PATH_CABLAGGI = "configurazione/cablaggio.txt";
-    private final static ArrayList<Cablaggio> cablaggi;
+    private static final String PATH_CABLAGGI = "configurazione/cablaggio.txt";
+    private static final ArrayList<Cablaggio> cablaggi;
     public int[] cablaggio;
     public int[] cablaggioInvertito;
     private int puntoScatto;
@@ -28,6 +28,10 @@ public class Cablaggio {
         }
     }
 
+    public static int getTotaleCabaggi(){
+        return cablaggi.size();
+    }
+
     public int getPuntoScatto() {
         return puntoScatto;
     }
@@ -37,6 +41,7 @@ public class Cablaggio {
     }
 
     static {
+        int tmp = 0;
         cablaggi = new ArrayList<>();
         FileReader fr = null;
         BufferedReader br = null;
